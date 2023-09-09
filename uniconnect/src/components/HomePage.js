@@ -13,6 +13,7 @@ import CardPost from './CardPost';
 import RichTextEditor from './RichTextEditor';
 import moment from 'moment';
 
+import UploadFile from './UploadFile'
 
 function HomePage() {
     const [token, setToken] = useLocalStorage('TOKEN', '');
@@ -20,6 +21,13 @@ function HomePage() {
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
     const [open, setOpen] = useState(false);
+
+    const [fileLoad, setFileLoad] = React.useState([]);
+
+
+    useEffect(() => {
+    }, [fileLoad]);
+
 
 
     useEffect(() => {
@@ -39,18 +47,20 @@ function HomePage() {
     };
 
 
+
+
     const handleEditorChange = (value) => {
         if (value) {
-
-            console.log(request)
-            const data = JSON.stringify({
+            let data = JSON.stringify({
                 "content": value,
                 "timestamp": new Date(),
                 "userId": name.id,
                 "groupId": categoria,
+
+                "filesBase": fileLoad.map(file => ({ "filesBase64": file.data, "fileName": file.name }))
             });
 
-            const config = {
+            let config = {
                 method: 'post',
                 maxBodyLength: Infinity,
                 url: 'https://localhost:44305/api/Post',
@@ -83,7 +93,6 @@ function HomePage() {
     const handleLoginInputChange = (e) => {
 
         const { name, value } = e.target;
-        console.log(name, value);
         setRequest((prevData) => ({
             ...prevData,
             [name]: value,
@@ -121,7 +130,6 @@ function HomePage() {
                 .then((response) => {
                     if (!response.data.errors) {
                         setgruppiList(response.data);
-                        console.log("gruppi", response.data)
                     }
                 })
                 .catch((error) => {
@@ -143,7 +151,7 @@ function HomePage() {
                 .then((response) => {
                     if (!response.data.errors) {
                         setPostList(response.data);
-                        console.log(response.data)
+
                     }
                     else {
 
@@ -217,31 +225,38 @@ function HomePage() {
                         Nuovo Post
                     </Typography>
 
-                    <Typography id="modal-modal-title" variant="h7" component="h7">
-                        Gruppo
-                    </Typography>
-                    <Select
-                        sx={{ marginBottom: "10px" }}
-                        placeholder="Nome Gruppo"
-                        name="selectedGroupId"
-                        value={request.selectedGroupId}
-                        onChange={(e) => setCategoria(e.target.value)}
-                        fullWidth
-                        margin="normal"
-                    >
-                        {gruppiList && gruppiList.map((gruppo) => (
-                            <MenuItem key={gruppo.groupId} value={gruppo.groupId}>
-                                {gruppo.groupName}
-                            </MenuItem>
-                        ))}
-                    </Select>
-
+                    <Grid container spacing={2}>
+                        <Grid item xs={12}>
+                            <Typography id="modal-modal-title" variant="h7" component="h7">
+                                Gruppo
+                            </Typography>
+                            <Select
+                                sx={{ marginBottom: "10px" }}
+                                placeholder="Nome Gruppo"
+                                name="selectedGroupId"
+                                value={request.selectedGroupId}
+                                onChange={(e) => setCategoria(e.target.value)}
+                                fullWidth
+                                margin="normal"
+                            >
+                                {gruppiList && gruppiList.map((gruppo) => (
+                                    <MenuItem key={gruppo.groupId} value={gruppo.groupId}>
+                                        {gruppo.groupName}
+                                    </MenuItem>
+                                ))}
+                            </Select>
+                        </Grid>
+                        <Grid item xs={12} sx={{ marginBottom: "15px" }}>
+                            <UploadFile sx={{ paddingTop: "15px" }} onSendClick={setFileLoad}></UploadFile>
+                        </Grid>
+                    </Grid>
 
                     <RichTextEditor
                         value={request.description}
                         onSendClick={handleEditorChange}
                     />
                 </Box>
+
             </Modal>
         </div>
     </div >

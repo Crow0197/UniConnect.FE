@@ -102,6 +102,7 @@ function SignedIn() {
             "name": registrationData.name,
             "password": registrationData.password,
             "avatar": registrationData.avatar,
+            "universita": registrationData.universita,
         });
 
 
@@ -240,6 +241,15 @@ function SignedIn() {
                                     margin="normal"
                                 />
                                 <TextField
+                                    label="Università"
+                                    name="name"
+                                    type="text"
+                                    value={registrationData.universita}
+                                    onChange={handleRegistrationInputChange}
+                                    fullWidth
+                                    margin="normal"
+                                />
+                                <TextField
                                     label="Password"
                                     name="password"
                                     type="password"
@@ -251,7 +261,7 @@ function SignedIn() {
                                 <TextField
                                     label="Conferma Password"
                                     name="cPassword"
-                                    type="cPassword"
+                                    type="password"
                                     value={registrationData.cPassword}
                                     onChange={handleRegistrationInputChange}
                                     fullWidth

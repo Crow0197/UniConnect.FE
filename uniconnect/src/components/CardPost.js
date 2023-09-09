@@ -20,6 +20,7 @@ import { Badge, Grid } from '@mui/material';
 import moment from 'moment';
 import axios from 'axios';
 import useLocalStorage from './../utility/useLocalStorage'; // Assicurati di specificare il percorso corretto
+import FileCard from './FileCard';
 
 
 
@@ -64,7 +65,6 @@ export default function CardPost(props) {
             .then((response) => {
                 if (!response.data.errors) {
                     setCommenti(response.data);
-                    console.log("gruppi", response.data)
                 }
             })
             .catch((error) => {
@@ -74,15 +74,22 @@ export default function CardPost(props) {
     }
     const [editorValue, setEditorValue] = React.useState('');
     const [token, setToken] = useLocalStorage('TOKEN', '');
+    const [filesUpload, setFilesUpload] = React.useState();
 
 
+    const imageTypes = [
+        '.jpg',
+        '.jpeg',
+        '.png',
+        '.gif',
+        // Aggiungi altri tipi di immagine supportati se necessario
+    ];
 
 
 
     useEffect(() => {
-        console.clear()
-        console.log(props)
-    }, []);
+        setFilesUpload(props.children.files)
+    }, [props]);
 
     const [request, setRequest] = useState({
         groupName: "",
@@ -92,10 +99,8 @@ export default function CardPost(props) {
     const [name, setCurentUser] = useLocalStorage('CURENTUSER', '');
 
     const handleEditorChange = (value) => {
-        console.log(value);
         if (value) {
 
-            console.log(request)
             const data = JSON.stringify({
                 "content": value,
                 "timestamp": new Date(),
@@ -145,22 +150,37 @@ export default function CardPost(props) {
                 title={props.children.user.userName}
                 subheader={moment(props.children.timestamp).format("DD/MM/YYYY HH:mm")}
             />
-            {/* <CardMedia
-                component="img"
-                height="194"
-                image="https://e0.pxfuel.com/wallpapers/370/538/desktop-wallpaper-nika-the-sun-god%E3%80%8Camv%E3%80%8Done-piece-my-fight-%E1%B4%B4%E1%B4%B0-sun-god-nika.jpg"
-                alt="Paella dish"
-            /> */}
+
+
+            {props.children.files.base64File && props.children.base64File
+                .filter(file => imageTypes.includes(file.fileType))
+                .map(file => (
+                    <CardMedia
+                        key={file.fileId}
+                        component="img"
+                        height="194"
+                        image={file.base64} // Usa la base64 come immagine
+                        alt={`Image ${file.fileId}`}
+                    />
+                ))}
+
+
+
+
+
             <CardContent>
-                <Typography variant="body2" color="text.secondary">
 
-                    <div dangerouslySetInnerHTML={{ __html: props.children.content }} >
-                    </div>
-
+                <div dangerouslySetInnerHTML={{ __html: props.children.content }} >
+                </div>
 
 
-                </Typography>
 
+
+
+                {filesUpload && filesUpload
+                    .map(file => (
+                        <FileCard key={file.fileId} file={file} isImage={imageTypes.includes(file.fileType)} />
+                    ))}
 
             </CardContent>
             <CardActions disableSpacing>
@@ -186,7 +206,7 @@ export default function CardPost(props) {
             <Collapse in={expanded} timeout="auto" unmountOnExit>
                 <Grid container sx={{ padding: "10px" }}>
                     <Grid item xs={12}>
-                        
+
                         <RichTextEditor
                             value={request.description}
                             onSendClick={handleEditorChange}
