@@ -1,0 +1,14 @@
+.card-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 20vh; /* Imposta l'altezza al 100% della viewport per centrare verticalmente */
+    margin-top: 5px;
+  }
+  
+  .card {
+    min-width: 50%; /* Larghezza minima del 50% */
+    max-width: 80%; /* Larghezza massima se il contenuto è più piccolo */
+    /* Altri stili della card */
+  }
+  

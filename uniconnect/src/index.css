@@ -1,0 +1,19 @@
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  position: relative; /* Aggiunto per posizionare correttamente il layer nero */
+  background: url("./img/Abstract_Background.jpg") center/cover no-repeat fixed;
+  /* 'center/cover' centra l'immagine e la fa coprire l'intero spazio */
+  /* 'no-repeat' impedisce la ripetizione dell'immagine */
+  /* 'fixed' fa in modo che l'immagine sia fissata anche quando si scorre la pagina */
+}
+
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}

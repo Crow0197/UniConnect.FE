@@ -1,0 +1,18 @@
+<mat-drawer-container class="example-container" autosize>
+  <mat-drawer #drawer class="example-sidenav" mode="side">
+    <app-side-bar></app-side-bar>
+   
+  </mat-drawer>
+
+  <div class="navbar">
+   
+  </div>
+  <div class="content">
+    <router-outlet></router-outlet> <!-- Qui verranno visualizzati i componenti delle route -->
+  </div>
+  <div class="footer">
+    <!-- Contenuto del footer -->
+  </div>
+
+
+</mat-drawer-container>

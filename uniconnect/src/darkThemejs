@@ -1,0 +1,11 @@
+import { createTheme } from '@mui/material/styles';
+
+// Crea un tema scuro personalizzato
+const darkTheme = createTheme({
+  palette: {
+    type: 'dark', // Imposta il tipo di tema su "dark"
+    // Altri colori personalizzati per il tema scuro
+  },
+});
+
+export default darkTheme;

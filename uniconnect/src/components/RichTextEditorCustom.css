@@ -1,0 +1,45 @@
+/* RichTextEditorCustom.css */
+
+/* Imposta il colore del testo su bianco */
+.ql-editor {
+    color: white !important;
+}
+
+/* Imposta il colore delle icone sulla barra degli strumenti su bianco */
+.ql-toolbar button {
+    color: white !important;
+}
+
+/* Imposta lo sfondo delle icone sulla barra degli strumenti su bianco */
+.ql-toolbar button::before {
+    background-color: white !important;
+}
+
+
+.richtextWrap {
+    position: "relative";
+
+    /* fix the toolbar position */
+    :global(.ql-editor) {
+
+        /* fix the default theme color */
+        blockquote,
+        div,
+        h2,
+        h3,
+        h4,
+        ol,
+        p,
+        ul {
+            color: "[theme:black, default:black]";
+        }
+    }
+}
+
+.ql-toolbar.ql-snow {
+    border: 0px solid #ccc;
+    box-sizing: border-box;
+    font-family: 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
+    padding: 8px;
+    color: white !important;
+}
