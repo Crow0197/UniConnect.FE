@@ -10,6 +10,7 @@ import { Container } from '@mui/material';
 import useLocalStorage from './utility/useLocalStorage.js';
 import HomePage from './components/HomePage.js';
 import ListaGruppi from './components/ListaGruppi.js';
+import ListaEventi from './components/ListaEventi.js';
 
 
 const darkTheme = createTheme({
@@ -35,7 +36,9 @@ function App() {
             <Routes>
               <Route exact path='/' element={!token ? < SignedIn /> : <HomePage />}></Route>
               <Route exact path='/gruppi' element={< ListaGruppi />}></Route>
+              <Route exact path='/eventi' element={< ListaEventi />}></Route>
 
+              
             </Routes>
           </div>
         </Router>

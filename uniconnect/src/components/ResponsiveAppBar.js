@@ -92,12 +92,20 @@ function ResponsiveAppBar() {
               }}
             >
 
-              {pages.map((page) => (
-                <MenuItem key={page} onClick={handleCloseNavMenu}>
-                  <Typography textAlign="center">{page}</Typography>
-                </MenuItem>
-              ))}
 
+
+
+              <a href="/gruppi">
+                <MenuItem onClick={handleCloseNavMenu}>
+                  <Typography textAlign="center">GRUPPI</Typography>
+                </MenuItem>
+              </a>
+
+              <a href="/eventi">
+                <MenuItem onClick={handleCloseNavMenu}>
+                  <Typography textAlign="center">EVENTI</Typography>
+                </MenuItem>
+              </a>
 
             </Menu>
           </Box>
@@ -130,6 +138,15 @@ function ResponsiveAppBar() {
                 sx={{ my: 2, color: 'white', display: 'block' }}
               >
                 GRUPPI
+              </Button>
+            </a>
+
+            <a href="/eventi">
+              <Button
+                onClick={handleCloseNavMenu}
+                sx={{ my: 2, color: 'white', display: 'block' }}
+              >
+                EVENTI
               </Button>
             </a>
 
