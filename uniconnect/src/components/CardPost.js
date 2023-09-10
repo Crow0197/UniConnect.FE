@@ -39,6 +39,9 @@ export default function CardPost(props) {
     const [expanded, setExpanded] = React.useState(false);
     const [listacommenti, setCommenti] = React.useState(false);
     const [reload, setReload] = React.useState(false);
+    const [newComment, setNewComment] = React.useState(0);
+
+
 
 
     const handleExpandClick = () => {
@@ -78,12 +81,13 @@ export default function CardPost(props) {
 
 
     const imageTypes = [
-        '.jpg',
-        '.jpeg',
-        '.png',
-        '.gif',
+        "image/jpeg",
+        "image/jpg",
+        "image/png",
+        "image/gif",
         // Aggiungi altri tipi di immagine supportati se necessario
     ];
+
 
 
 
@@ -124,7 +128,7 @@ export default function CardPost(props) {
                     if (!response.data.errors) {
 
                         loading();
-
+                        setNewComment(newComment + 1);
                     }
                 })
                 .catch((error) => {
@@ -169,18 +173,24 @@ export default function CardPost(props) {
 
 
             <CardContent>
-
                 <div dangerouslySetInnerHTML={{ __html: props.children.content }} >
                 </div>
 
 
+                <Grid container spacing={2}>
+                    {filesUpload && filesUpload
+                        .map((file, index) => (
+
+                            <Grid item xs={12} sm={6} key={index}>
+                                <FileCard file={file} isImage={imageTypes.includes(file.fileType)} />
+                            </Grid>
+
+                        ))}
+                </Grid>
 
 
 
-                {filesUpload && filesUpload
-                    .map(file => (
-                        <FileCard key={file.fileId} file={file} isImage={imageTypes.includes(file.fileType)} />
-                    ))}
+
 
             </CardContent>
             <CardActions disableSpacing>
@@ -194,7 +204,7 @@ export default function CardPost(props) {
                     aria-label="show more"
                     sx={{ transform: 'none' }}
                 >
-                    <Badge badgeContent={props.children.numeroCommenti} color="primary">
+                    <Badge badgeContent={props.children.numeroCommenti + newComment} color="primary">
                         <ChatIcon />
                     </Badge>
 

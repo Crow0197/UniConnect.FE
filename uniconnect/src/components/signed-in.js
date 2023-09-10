@@ -9,6 +9,7 @@ import TextField from '@mui/material/TextField';
 import axios from 'axios';
 import useLocalStorage from './../utility/useLocalStorage'; // Assicurati di specificare il percorso corretto
 import { Alert, Avatar, Box, Grid, Typography } from '@mui/material';
+import UploadFile from './UploadFile';
 
 
 function SignedIn() {
@@ -20,6 +21,7 @@ function SignedIn() {
     const [errorLogin, setErrorLogin] = useState();
     const [errorRegister, setErrorRegister] = useState();
 
+    const [fileLoad, setFileLoad] = React.useState([]);
 
 
 
@@ -101,7 +103,7 @@ function SignedIn() {
             "email": registrationData.email,
             "name": registrationData.name,
             "password": registrationData.password,
-            "avatar": registrationData.avatar,
+            "avatar": fileLoad[0] ? fileLoad[0].data : "",
             "universita": registrationData.universita,
         });
 
@@ -121,7 +123,7 @@ function SignedIn() {
                 if (!response.data.errors) {
                     setCurentUser(response.data.user);
                     setToken(response.data.token);
-                    window.location.href='/';
+                    window.location.href = '/';
 
                 }
                 else {
@@ -139,7 +141,7 @@ function SignedIn() {
 
     return (<div>
 
-        <Typography variant="h4" component="h4" sx={{marginBottom:"2%"}}>
+        <Typography variant="h4" component="h4" sx={{ marginBottom: "2%" }}>
             Accedi o Registrati
         </Typography>
 
@@ -242,7 +244,7 @@ function SignedIn() {
                                 />
                                 <TextField
                                     label="Università"
-                                    name="name"
+                                    name="universita"
                                     type="text"
                                     value={registrationData.universita}
                                     onChange={handleRegistrationInputChange}
@@ -267,31 +269,33 @@ function SignedIn() {
                                     fullWidth
                                     margin="normal"
                                 />
-                                <TextField
-                                    label="Avatar"
-                                    name="avatar"
-                                    type="text"
-                                    value={registrationData.avatar}
-                                    onChange={handleRegistrationInputChange}
-                                    fullWidth
-                                    margin="normal"
-                                />
-                                <Button variant="contained" color="primary" onClick={() => startRegister()} disabled={registrationData.password === '' || registrationData.password !== registrationData.cPassword}>
-                                    Registrati
-                                </Button>
+                                <Grid container>
+                                    <Grid item xs={6} sx={{ alignItems: "flex-end" }}> <Button variant="contained" color="primary" onClick={() => startRegister()} disabled={registrationData.password === '' || registrationData.password !== registrationData.cPassword}>
+                                        Registrati
+                                    </Button></Grid>
+
+                                </Grid>
+
+
+
+
+
                             </Grid>
                             <Grid item xs={3}>
 
                                 <Grid item xs={12}>
                                     <Avatar
                                         alt={registrationData.name}
-                                        src={registrationData.avatar}
+                                        src={fileLoad[0] ? fileLoad[0].data : ""}
                                         sx={{
                                             width: 150,
                                             height: 150,
                                             margin: '0 auto',
                                         }}
                                     />
+                                </Grid>
+                                <Grid item xs={12}  sx={{ paddingTop: "5px", marginTop: "5px", paddingLeft:"35px" }}>
+                                    <UploadFile sx={{ paddingTop: "15px" }} onSendClick={setFileLoad} label="CARICA AVATAR" sigleMode="true"></UploadFile>
                                 </Grid>
                                 <Typography mt={2}>
 

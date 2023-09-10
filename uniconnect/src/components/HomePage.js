@@ -14,10 +14,15 @@ import RichTextEditor from './RichTextEditor';
 import moment from 'moment';
 
 import UploadFile from './UploadFile'
+import LoadingOverlay from './LoadingOverlay';
 
 function HomePage() {
     const [token, setToken] = useLocalStorage('TOKEN', '');
     const [postList, setPostList] = React.useState();
+    const [loading, setLoading] = React.useState(true);
+
+
+    
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
     const [open, setOpen] = useState(false);
@@ -112,9 +117,10 @@ function HomePage() {
         description: ""
     });
 
-
+  
 
     const loadData = () => {
+        setLoading(true);
         if (token) {
             let config = {
                 method: 'get',
@@ -151,7 +157,7 @@ function HomePage() {
                 .then((response) => {
                     if (!response.data.errors) {
                         setPostList(response.data);
-
+                        setLoading(false);
                     }
                     else {
 
@@ -192,6 +198,8 @@ function HomePage() {
             </Button>
         </div>
 
+        {loading && <LoadingOverlay></LoadingOverlay>}
+
 
 
         {postList &&
@@ -202,7 +210,7 @@ function HomePage() {
                 }))
                 .sort((a, b) => b.timestamp - a.timestamp) // Ordina in base al timestamp decrescente
                 .map((post, index) => (
-                    <Grid item xs={12} sm={6} md={4} lg={3} key={index}>
+                    <Grid item xs={12} sm={6} md={4} lg={3} key={index} sx={{marginBottom:"15px"}}>
                         <Card sx={{ backgroundColor: '#00000087', color: 'white', boxShadow: '0 0 10px rgba(0, 0, 0, 0.5)' }}>
                             <CardContent>
                                 <CardPost>{post}</CardPost>

@@ -5,7 +5,7 @@ import { styled } from '@mui/material/styles';
 import DeleteIcon from '@mui/icons-material/Delete';
 
 
-const UploadFile = ({ onSendClick }) => {
+const UploadFile = ({ onSendClick, label = "Upload file", sigleMode = false }) => {
   const [files, setFiles] = useState([]);
 
   useEffect(() => {
@@ -21,7 +21,13 @@ const UploadFile = ({ onSendClick }) => {
     reader.onload = (e) => {
       const base64Data = e.target.result;
       console.log("base64Data", base64Data)
-      setFiles([...files, { name: file.name, data: base64Data }]);
+
+      if (sigleMode) {
+        setFiles([{ name: file.name, data: base64Data }]);
+      }
+      else {
+        setFiles([...files, { name: file.name, data: base64Data }]);
+      }
 
 
     };
@@ -54,10 +60,11 @@ const UploadFile = ({ onSendClick }) => {
         href="#file-upload"
         sx={{ marginTop: "15" }}
       >
-        Upload a file
+        {label}
         <VisuallyHiddenInput type="file" onChange={handleChange} />
       </Button>
-      <Grid container spacing={2} sx={{ marginTop: "10px" }}>
+
+      {!sigleMode && <Grid container spacing={2} sx={{ marginTop: "10px" }} >
         {files.map((file) => (
           <Grid item key={file.name} xs={12} sm={6} md={4} lg={3}>
             <Card>
@@ -78,7 +85,8 @@ const UploadFile = ({ onSendClick }) => {
             </Card>
           </Grid>
         ))}
-      </Grid>
+      </Grid>}
+
     </div>
   );
 };

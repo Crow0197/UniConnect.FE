@@ -7,6 +7,9 @@ import CardMedia from '@mui/material/CardMedia';
 import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
+import Grid from '@mui/material/Grid';
+import ImageIcon from '@mui/icons-material/Image';
+import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile';
 
 const FileCard = ({ file, isImage }) => {
     const [open, setOpen] = useState(false);
@@ -37,53 +40,54 @@ const FileCard = ({ file, isImage }) => {
 
     const imageTypes = [
         "image/jpeg",
-
+        "image/jpg",
         "image/png",
-
         "image/gif",
-
         "application/pdf",
-
         "application/zip",
-
         "application/rar",
         // Aggiungi altri tipi di immagine supportati se necessario
     ];
 
-
-
-
     return (
-        <Card>
+        <Grid item >
+            <Card>
+                {isImage ? (
+                    <CardMedia
+                        component="img"
+                        height="194"
+                        image={file.base64}
+                        alt={`Image ${file.fileId}`}
+                        onClick={handleOpenModal}
+                        style={{ cursor: 'pointer' }}
+                    />
+                ) : (
+                    <CardContent>
+                        <Grid container alignItems="center" spacing={1}>
+                            <Grid item>
+                                {isImage ?<ImageIcon /> : <InsertDriveFileIcon />}
+                            </Grid>
+                            <Grid item>
+                                <div><b>Nome del file: </b>{file.fileName}</div>
+                                <div><b>Tipo di file: </b>{file.fileType.split("/")[1]}</div>
+                            </Grid>
+                        </Grid>
+                    </CardContent>
+                )}
+                
 
-            {console.log(isImage, file.fileType)}
-            {isImage ? (
-                <CardMedia
-                    component="img"
-                    height="194"
-                    image={file.base64}
-                    alt={`Image ${file.fileId}`}
-                    onClick={handleOpenModal}
-                    style={{ cursor: 'pointer' }}
-                />
-            ) : (
-                <CardContent>
-                    <div>Nome del file: {file.fileName}</div>
-                    <div>Tipo di file: {file.fileType.split("/")[1]}</div>
-                </CardContent>
-            )}
+                <CardActions style={{ justifyContent: 'flex-end' }}>
+                    <Button onClick={handleDownload}>Scarica</Button>
+                </CardActions>
 
-            <CardActions>
-                <Button onClick={handleDownload}>Scarica</Button>
-            </CardActions>
-
-            <Dialog open={open} onClose={handleCloseModal}>
-                <DialogTitle>Anteprima dell'immagine</DialogTitle>
-                <DialogContent>
-                    <img src={file.base64} alt={`Image ${file.fileId}`} style={{ width: '100%' }} />
-                </DialogContent>
-            </Dialog>
-        </Card>
+                <Dialog open={open} onClose={handleCloseModal}>
+                    <DialogTitle>Anteprima dell'immagine</DialogTitle>
+                    <DialogContent>
+                        <img src={file.base64} alt={`Image ${file.fileId}`} style={{ width: '100%' }} />
+                    </DialogContent>
+                </Dialog>
+            </Card>
+        </Grid>
     );
 };
 
