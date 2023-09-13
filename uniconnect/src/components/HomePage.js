@@ -156,6 +156,7 @@ function HomePage() {
             axios.request(config)
                 .then((response) => {
                     if (!response.data.errors) {
+                        console.log("prova",response.data)
                         setPostList(response.data);
                         setLoading(false);
                     }

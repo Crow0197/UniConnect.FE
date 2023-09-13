@@ -43,13 +43,13 @@ export default function ListaGruppi() {
                 url: 'https://localhost:44305/api/Gruppo/gruppi/' + name.id,
                 headers: {
                     'accept': '*/*',
-                    'Authorization': 'Bearer '+ token
+                    'Authorization': 'Bearer ' + token
                 }
             };
 
-        
 
-           
+
+
             axios.request(config)
                 .then((response) => {
                     if (!response.data.errors) {
@@ -116,6 +116,73 @@ export default function ListaGruppi() {
         }));
     };
 
+
+    const associationGruop = (groupId) => {
+        let data = JSON.stringify({
+            "userId": name.id,
+            "groupId": groupId
+        });
+
+        let config = {
+            method: 'post',
+            maxBodyLength: Infinity,
+            url: 'https://localhost:44305/api/Gruppo/user-group-association',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + token
+            },
+            data: data
+        };
+
+        axios.request(config)
+            .then((response) => {
+                if (!response.data.errors) {        
+                    // Nascondi il messaggio di successo dopo 10 secondi
+                    setTimeout(() => {
+                        setSuccess(false);
+                    }, 10000);
+                    loadData();
+                }
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+
+    };
+
+    const disassociateGruop = (groupId) => {
+        let data = JSON.stringify({
+            "userId": name.id,
+            "groupId": groupId
+        });
+
+        let config = {
+            method: 'post',
+            maxBodyLength: Infinity,
+            url: 'https://localhost:44305/api/Gruppo/user-group-disassociate',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + token
+            },
+            data: data
+        };
+
+        axios.request(config)
+            .then((response) => {
+                if (!response.data.errors) {        
+                    // Nascondi il messaggio di successo dopo 10 secondi
+                    setTimeout(() => {
+                        setSuccess(false);
+                    }, 10000);
+                    loadData();
+                }
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+
+    };
+
     return (
         <div>
             {success && (
@@ -156,8 +223,8 @@ export default function ListaGruppi() {
                                 </Typography>
                             </CardContent>
                             <CardActions>
-                                <Button size="small">{gruppo.shareButtonLabel}</Button>
-                                <Button size="small">{gruppo.learnMoreButtonLabel}</Button>
+                            <Button size="small" variant="outlined" color="error"  onClick={()=>disassociateGruop(gruppo.groupId)}>ABBANDONA GRUPPO</Button>
+
                             </CardActions>
                         </Card>
                     </Grid>
@@ -183,8 +250,7 @@ export default function ListaGruppi() {
                                 </Typography>
                             </CardContent>
                             <CardActions>
-                                <Button size="small">{gruppo.shareButtonLabel}</Button>
-                                <Button size="small">{gruppo.learnMoreButtonLabel}</Button>
+                            <Button size="small"  variant="outlined" color="error" onClick={()=>disassociateGruop(gruppo.groupId)}>ABBANDONA GRUPPO</Button>
                             </CardActions>
                         </Card>
                     </Grid>
@@ -210,15 +276,13 @@ export default function ListaGruppi() {
                                 </Typography>
                             </CardContent>
                             <CardActions>
-                                <Button size="small">{gruppo.shareButtonLabel}</Button>
-                                <Button size="small">{gruppo.learnMoreButtonLabel}</Button>
+                                <Button size="small" variant="outlined"  onClick={()=>associationGruop(gruppo.groupId)}>UNISCITI</Button>
                             </CardActions>
                         </Card>
                     </Grid>
                 ))}
             </Grid>
             <div>
-                <Button onClick={handleOpen}>Crea un nuovo gruppo</Button>
                 <Modal
                     open={open}
                     onClose={handleClose}

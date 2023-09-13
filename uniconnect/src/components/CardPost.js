@@ -152,7 +152,11 @@ export default function CardPost(props) {
                     </IconButton>
                 }
                 title={props.children.user.userName}
-                subheader={moment(props.children.timestamp).format("DD/MM/YYYY HH:mm")}
+                subheader={<Grid sx={{ fontSize: "12px", opacity: "0.6" }}>
+                    <strong>Gruppo:</strong> {props.children.group.groupName}
+
+
+                </Grid>}
             />
 
 
@@ -177,7 +181,7 @@ export default function CardPost(props) {
                 </div>
 
 
-                <Grid container spacing={2}>
+                <Grid container >
                     {filesUpload && filesUpload
                         .map((file, index) => (
 
@@ -194,7 +198,7 @@ export default function CardPost(props) {
 
             </CardContent>
             <CardActions disableSpacing>
-
+                <Grid sx={{ fontSize: "12px", opacity: "0.5" }}> Inviato alle: <u>{moment(props.children.timestamp).format("DD/MM/YYYY HH:mm")}</u></Grid>
 
 
                 <ExpandMore

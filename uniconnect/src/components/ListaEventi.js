@@ -43,13 +43,13 @@ export default function ListaEventi() {
                 url: 'https://localhost:44305/api/evento/eventi/' + name.id,
                 headers: {
                     'accept': '*/*',
-                    'Authorization': 'Bearer '+ token
+                    'Authorization': 'Bearer ' + token
                 }
             };
 
-        
 
-           
+
+
             axios.request(config)
                 .then((response) => {
                     if (!response.data.errors) {
@@ -77,7 +77,7 @@ export default function ListaEventi() {
                 "description": value,
                 "date": new Date(),
                 "idUser": name.id
-            });                  
+            });
 
             const config = {
                 method: 'post',
@@ -116,6 +116,74 @@ export default function ListaEventi() {
             [name]: value,
         }));
     };
+
+
+    const associationEvent = (eventId) => {
+        let data = JSON.stringify({
+            "userId": name.id,
+            "eventId": eventId
+        });
+
+        let config = {
+            method: 'post',
+            maxBodyLength: Infinity,
+            url: 'https://localhost:44305/api/Evento/user-event-association',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + token
+            },
+            data: data
+        };
+
+        axios.request(config)
+            .then((response) => {
+                if (!response.data.errors) {        
+                    // Nascondi il messaggio di successo dopo 10 secondi
+                    setTimeout(() => {
+                        setSuccess(false);
+                    }, 10000);
+                    loadData();
+                }
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+
+    };
+
+    const disassociateEvent = (eventId) => {
+        let data = JSON.stringify({
+            "userId": name.id,
+            "eventId": eventId
+        });
+
+        let config = {
+            method: 'post',
+            maxBodyLength: Infinity,
+            url: 'https://localhost:44305/api/Evento/user-event-disassociate',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + token
+            },
+            data: data
+        };
+
+        axios.request(config)
+            .then((response) => {
+                if (!response.data.errors) {        
+                    // Nascondi il messaggio di successo dopo 10 secondi
+                    setTimeout(() => {
+                        setSuccess(false);
+                    }, 10000);
+                    loadData();
+                }
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+
+    };
+
 
     return (
         <div>
@@ -157,8 +225,8 @@ export default function ListaEventi() {
                                 </Typography>
                             </CardContent>
                             <CardActions>
-                                <Button size="small">{evento.shareButtonLabel}</Button>
-                                <Button size="small">{evento.learnMoreButtonLabel}</Button>
+                                <Button size="small" variant="outlined" color="error" onClick={() => disassociateEvent(evento.eventId)}>ABBANDONA GRUPPO</Button>
+
                             </CardActions>
                         </Card>
                     </Grid>
@@ -184,8 +252,7 @@ export default function ListaEventi() {
                                 </Typography>
                             </CardContent>
                             <CardActions>
-                                <Button size="small">{evento.shareButtonLabel}</Button>
-                                <Button size="small">{evento.learnMoreButtonLabel}</Button>
+                                <Button size="small" variant="outlined" color="error" onClick={() => disassociateEvent(evento.eventId)}>ABBANDONA GRUPPO</Button>
                             </CardActions>
                         </Card>
                     </Grid>
@@ -198,7 +265,7 @@ export default function ListaEventi() {
             </Typography>
 
             <Grid container spacing={2}>
-                {(eventiList && eventiList.altrieventi)  && eventiList.altrieventi.map((evento, index) => (
+                {(eventiList && eventiList.altriEventi) && eventiList.altriEventi.map((evento, index) => (
                     <Grid item xs={12} sm={6} md={4} lg={3} key={index}>
                         <Card sx={{ maxWidth: 345 }}>
                             <CardContent>
@@ -211,15 +278,14 @@ export default function ListaEventi() {
                                 </Typography>
                             </CardContent>
                             <CardActions>
-                                <Button size="small">{evento.shareButtonLabel}</Button>
-                                <Button size="small">{evento.learnMoreButtonLabel}</Button>
+                            <Button size="small" variant="outlined"  onClick={()=>associationEvent(evento.eventId)}>UNISCITI</Button>
+
                             </CardActions>
                         </Card>
                     </Grid>
                 ))}
             </Grid>
             <div>
-                <Button onClick={handleOpen}>Crea un nuovo evento</Button>
                 <Modal
                     open={open}
                     onClose={handleClose}
